@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import Cell from "./Cell";
-import "./Board.css";
+import React, { useState } from 'react'
+import Cell from './Cell'
+import './Board.css'
 
 /** Game board of Lights out.
  *
@@ -27,38 +27,46 @@ import "./Board.css";
  *
  **/
 
-function Board({ nrows, ncols, chanceLightStartsOn }) {
-  const [board, setBoard] = useState(createBoard());
+function Board ({ nrows = 3, ncols = 3, chanceLightStartsOn = 0.5 }) {
+  const [board, setBoard] = useState(createBoard())
 
   /** create a board nrows high/ncols wide, each cell randomly lit or unlit */
-  function createBoard() {
-    let initialBoard = [];
-    // TODO: create array-of-arrays of true/false values
-    return initialBoard;
+  function createBoard () {
+    let initialBoard = []
+
+    for (let i = 0; i < nrows; i++) {
+      initialBoard.push(
+        Array.from({ length: ncols }).map(
+          n => Math.random() < chanceLightStartsOn
+        )
+      )
+    }
+
+    return initialBoard
   }
 
-  function hasWon() {
+  function hasWon () {
     // TODO: check the board in state to determine whether the player has won.
   }
 
-  function flipCellsAround(coord) {
+  function flipCellsAround (coord) {
     setBoard(oldBoard => {
-      const [y, x] = coord.split("-").map(Number);
+      const [y, x] = coord.split('-').map(Number)
 
       const flipCell = (y, x, boardCopy) => {
         // if this coord is actually on board, flip it
 
         if (x >= 0 && x < ncols && y >= 0 && y < nrows) {
-          boardCopy[y][x] = !boardCopy[y][x];
+          boardCopy[y][x] = !boardCopy[y][x]
         }
-      };
+      }
 
       // TODO: Make a (deep) copy of the oldBoard
 
       // TODO: in the copy, flip this cell and the cells around it
 
       // TODO: return the copy
-    });
+    })
   }
 
   // if the game is won, just show a winning msg & render nothing else
@@ -70,4 +78,4 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
   // TODO
 }
 
-export default Board;
+export default Board
