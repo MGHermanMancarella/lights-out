@@ -1,10 +1,10 @@
-.Cell {
+tbody .Cell {
   height: 100px;
   width: 100px;
-  background-color: darkgray;
+  background-color: black;
   cursor: pointer;
 }
 
-.Cell-lit {
+tbody .Cell-lit {
   background-color: white;
 }

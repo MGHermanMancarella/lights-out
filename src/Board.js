@@ -28,7 +28,7 @@ import './Board.css'
  **/
 
 function Board ({ nrows = 3, ncols = 3, chanceLightStartsOn = 0.5 }) {
-  const [board, setBoard] = useState(createBoard())
+  const [board, setBoard] = useState(createBoard());
 
   /** create a board nrows high/ncols wide, each cell randomly lit or unlit */
   function createBoard () {
@@ -42,16 +42,22 @@ function Board ({ nrows = 3, ncols = 3, chanceLightStartsOn = 0.5 }) {
       )
     }
 
-    return initialBoard
+    return initialBoard;
+
   }
 
+  /** checks board to determine whether player has won */
   function hasWon () {
-    // TODO: check the board in state to determine whether the player has won.
+    return board.every(row => row.every(cell => !cell));
   }
 
-  function flipCellsAround (coord) {
+
+  /** given coordinate ('y-x'), flips cell at coord as well as nesw cells
+   *  as well
+   */
+  function flipCellsAround(coord) {
     setBoard(oldBoard => {
-      const [y, x] = coord.split('-').map(Number)
+      const [y, x] = coord.split('-').map(Number) // y=Number(y), x=Number(x)
 
       const flipCell = (y, x, boardCopy) => {
         // if this coord is actually on board, flip it
@@ -62,20 +68,38 @@ function Board ({ nrows = 3, ncols = 3, chanceLightStartsOn = 0.5 }) {
       }
 
       // TODO: Make a (deep) copy of the oldBoard
-
+      const deepCopy = oldBoard.map(row => [...row]);
       // TODO: in the copy, flip this cell and the cells around it
+      flipCell(y, x, deepCopy);
+      flipCell(y-1, x, deepCopy);
+      flipCell(y+1, x, deepCopy);
+      flipCell(y, x+1, deepCopy);
+      flipCell(y, x-1, deepCopy);
 
       // TODO: return the copy
+      return deepCopy;
     })
   }
 
   // if the game is won, just show a winning msg & render nothing else
 
-  // TODO
 
-  // make table board
+  return (
+  <div>
+    {hasWon() && <p>You win!</p>}
+    {!hasWon() &&
+   <table className="table">
+     <tbody key="tbody">
+      {board.map((row, rowNum) =>
+          <tr key={rowNum}>
+            {row.map((cell,colNum) =>
+                <Cell key={`${rowNum}-${colNum}`} click={() => flipCellsAround(`${rowNum}-${colNum}`)} isLit={cell} />)}
+          </tr>
+        )}
+      </tbody>
+  </table>}
+  </div>)
 
-  // TODO
 }
 
 export default Board
